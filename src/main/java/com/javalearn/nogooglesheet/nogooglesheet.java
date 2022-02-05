@@ -1,4 +1,13 @@
 package com.javalearn.errorcatcher;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
 /*
 <SCRIPTINFO>
 <document>without any doc</document>
@@ -11,9 +20,6 @@ package com.javalearn.errorcatcher;
 */
 public class nogooglesheet {
 
-
-
-    constants();
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,7 +53,7 @@ import java.util.Scanner;
                 if (s.isFile()) {
                     if(s.getName().contains(mask)) {
                         if(checkIsJar(s,key)==1) {
-                            print(s.getName());
+                            System.out.println(s.getName());
                             readyFile.write(Integer.toString(i)+"."+s.getPath()+"\n");
                             i++;
                         }
@@ -57,14 +63,16 @@ import java.util.Scanner;
                 }
             }
             readyFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
 
-    main() {
-        execDate = formatDT("yyyyMMdd");
-        scriptsName = bsh.sysinfo.getScriptName();
-        setStartExecutionTime(execDate, scriptsName);
+    boolean main() {
+        //execDate = formatDT("yyyyMMdd");
+        //scriptsName = bsh.sysinfo.getScriptName();
+        //setStartExecutionTime(execDate, scriptsName);
 
         try {
             Date date = new Date();
@@ -77,8 +85,8 @@ import java.util.Scanner;
 
             getFiles(needPath,needMask,needKeyText,outputDataFile);
         }
-        catch( RuntimeException ex ){
-            sendMailGeneral(//EmailGladush,
+        catch(RuntimeException | IOException ex ){
+            System.out.println((//EmailGladush,
                     "anton.potapenko@privatbank.ua",
                     "ERROR in no_google_sheet.bsh Поиск скриптов, забирающих данные из гугл-таблиц",
                     "Ошибка при выполнении.\n\n" +
@@ -86,7 +94,7 @@ import java.util.Scanner;
             );
             return false;
         }
-        setFinishExecutionTime(execDate, scriptsName);
+        //setFinishExecutionTime(execDate, scriptsName);
         return true;
     }
 return main();
